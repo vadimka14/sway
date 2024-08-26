@@ -1,0 +1,12 @@
+[package]
+name = "forc-node"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies] 
+clap = { version = "4.5.4", features = ["derive", "env"] }
+forc-tracing = { path = "../../forc-tracing" }
