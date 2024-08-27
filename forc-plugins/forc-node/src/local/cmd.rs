@@ -1,7 +1,10 @@
 use clap::Parser;
 use std::path::PathBuf;
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 pub struct LocalCmd {
-    chain_config: Option<PathBuf>,
+    #[clap(long = "chain-config")]
+    pub chain_config: Option<PathBuf>,
+    #[clap(long = "port")]
+    pub port: Option<u16>,
 }

@@ -3,6 +3,8 @@ use fuel_core::service::DbType;
 use fuel_core_bin::cli::run::Command as RunCmd;
 use std::str::FromStr;
 
+use crate::local::cmd::LocalCmd;
+
 #[derive(Debug, Clone)]
 pub struct RunOpts {
     command: RunCmd,
@@ -33,7 +35,7 @@ impl FromStr for RunOpts {
 pub enum Mode {
     /// Local is a local node suited for local development.
     /// By default, the node is in `debug` mode and the db used is `in-memory`.
-    Local,
+    Local(LocalCmd),
     /// Testnet is the configuration to connect the node to latest testnet.
     Testnet,
     /// Custom is basically equivalent to running `fuel-core run` with some params.
@@ -43,10 +45,14 @@ pub enum Mode {
 impl From<Mode> for RunOpts {
     fn from(value: Mode) -> Self {
         let run_cmd = match value {
-            Mode::Local => {
+            Mode::Local(local_cmd) => {
                 let mut opts = RunOpts::default();
                 opts.command.database_type = DbType::InMemory;
                 opts.command.debug = true;
+                opts.command.snapshot = local_cmd.chain_config;
+                if let Some(port) = local_cmd.port {
+                    opts.command.graphql.port = port;
+                }
                 opts.command
             }
             Mode::Testnet => unimplemented!("testnet is not implemented yet"),
