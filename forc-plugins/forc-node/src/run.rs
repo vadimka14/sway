@@ -7,13 +7,13 @@ use crate::local::cmd::LocalCmd;
 
 #[derive(Debug, Clone)]
 pub struct RunOpts {
-    command: RunCmd,
+    command: Box<RunCmd>,
 }
 
 impl Default for RunOpts {
     fn default() -> Self {
         let default_input = vec![""];
-        let command = RunCmd::parse_from(default_input);
+        let command = Box::new(RunCmd::parse_from(default_input));
         Self { command }
     }
 }
@@ -23,7 +23,7 @@ impl FromStr for RunOpts {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s.split(" ");
-        let command = RunCmd::parse_from(s);
+        let command = Box::new(RunCmd::parse_from(s));
 
         let run_opts = RunOpts { command };
         Ok(run_opts)
@@ -70,6 +70,6 @@ impl Default for Mode {
 
 pub async fn run_mode(mode: Mode) -> anyhow::Result<()> {
     let opts: RunOpts = mode.into();
-    fuel_core_bin::cli::run::exec(opts.command).await?;
+    fuel_core_bin::cli::run::exec(*opts.command).await?;
     Ok(())
 }

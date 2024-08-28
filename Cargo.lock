@@ -2815,14 +2815,16 @@ dependencies = [
 
 [[package]]
 name = "forc-node"
-version = "0.0.0"
+version = "0.63.1"
 dependencies = [
  "anyhow",
  "clap 4.5.16",
  "forc-tracing 0.63.1",
+ "forc-util",
  "fuel-core",
  "fuel-core-bin",
  "humantime",
+ "include_dir",
  "tokio",
 ]
 

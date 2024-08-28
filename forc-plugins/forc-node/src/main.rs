@@ -3,6 +3,7 @@
 mod cmd;
 mod local;
 mod op;
+mod pkg;
 mod run;
 mod testnet;
 
