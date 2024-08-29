@@ -7,7 +7,7 @@ use std::path::PathBuf;
 static CHAINCONFIG_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/chain_configs");
 
 const CONFIG_FOLDER: &str = "chainspecs";
-const LOCAL: &str = "local-testnet";
+const LOCAL: &str = "local";
 const TESTNET: &str = "testnet";
 
 pub enum ChainConfig {
