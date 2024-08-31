@@ -1,7 +1,4 @@
 use clap::Parser;
 
-#[derive(Parser)]
-pub struct TestnetCmd {
-    #[clap(long = "port")]
-    pub port: Option<u16>,
-}
+#[derive(Parser, Debug, Clone)]
+pub struct TestnetCmd {}

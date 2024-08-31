@@ -5,11 +5,7 @@ use crate::{
 };
 
 pub(crate) async fn run(cmd: LocalCmd) -> anyhow::Result<()> {
-    let mut cmd = cmd.clone();
     create_chainconfig_dir(ChainConfig::Local)?;
-    if cmd.chain_config.is_none() {
-        cmd.chain_config = Some(ChainConfig::Local.into());
-    }
     let mode = Mode::Local(cmd);
     run_mode(mode).await?;
     Ok(())
