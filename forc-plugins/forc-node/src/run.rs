@@ -2,7 +2,11 @@ use clap::Parser;
 use fuel_core_bin::cli::run::Command as RunCmd;
 use std::{path::PathBuf, str::FromStr};
 
-use crate::{local::cmd::LocalCmd, pkg::ChainConfig, testnet::cmd::TestnetCmd};
+use crate::{
+    local::cmd::LocalCmd,
+    pkg::ChainConfig,
+    testnet::{cmd::TestnetCmd, op::TestnetOpts},
+};
 
 #[derive(Debug, Clone)]
 pub struct RunOpts {
@@ -36,7 +40,7 @@ pub enum Mode {
     /// By default, the node is in `debug` mode and the db used is `in-memory`.
     Local(LocalCmd),
     /// Testnet is the configuration to connect the node to latest testnet.
-    Testnet(TestnetCmd),
+    Testnet(TestnetOpts),
     /// Custom is basically equivalent to running `fuel-core run` with some params.
     Custom(RunOpts),
 }
@@ -47,7 +51,8 @@ impl From<Mode> for RunOpts {
             Mode::Local(local_cmd) => {
                 let mut run_cmd = vec!["--db-type in-memory".to_string(), "--debug".to_string()];
                 let path = local_cmd
-                    .chain_config.map(|path| format!("{}", path.display()))
+                    .chain_config
+                    .map(|path| format!("{}", path.display()))
                     .unwrap_or_else(|| {
                         let path: PathBuf = ChainConfig::Local.into();
                         format!("{}", path.display())
@@ -57,8 +62,9 @@ impl From<Mode> for RunOpts {
                 Box::new(RunCmd::parse_from(run_cmd))
             }
             Mode::Testnet(testnet_cmd) => {
-                /*
                 const SERVICE_NAME: &str = "fuel-sepolia-testnet-node";
+                let mut run_cmd = vec!["--peer-id".to_string()];
+                /*
                 let mut opts = RunOpts::default();
                 opts.command.service_name = SERVICE_NAME.to_string();
                 opts.command.graphql.ip = IpAddr::from_str("0.0.0.0").unwrap();
